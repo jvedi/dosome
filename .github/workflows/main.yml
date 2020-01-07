@@ -2,7 +2,7 @@ name: DoSome
 
 on:
   push:
-  #schedule:
+  schedule:
     - cron:  '*/5 * * * *'
 
 jobs:
