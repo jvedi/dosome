@@ -34,8 +34,6 @@ jobs:
         RPO_NAME: ${{ secrets.RPO_NAME }}
       run: |
         git clone "$PRO_URL"
-#        cd "$RPO_NAME"
-#        npm i
-#        node app.js
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v1        
+        cd "$RPO_NAME"
+        npm i
+        node app.js     
