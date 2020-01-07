@@ -1,0 +1,40 @@
+name: DoSome
+
+on:
+  push:
+  schedule:
+    - cron:  '*/5 * * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: "10.x"
+      
+    - name: Setup push env
+      env:
+        ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$ACTION_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+        git config --global user.name 'dosome'
+        git config --global user.email 'dosome'
+        
+    - name: Executor
+      env:
+        PRO_URL: ${{ secrets.PRO_URL }}
+        RPO_NAME: ${{ secrets.RPO_NAME }}
+      run: |
+        git clone "$PRO_URL"
+        cd "$RPO_NAME"
+        npm i
+        node app.js
+        
